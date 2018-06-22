@@ -1,10 +1,17 @@
-
-
-
+def neighbours(cell):
+    position = cell.split(",")
+    for x in range(-1, 2):
+        for y in range(-1, 2):
+            if not (x == y == 0):
+                yield "%i,%i" % (position[0] + x, position[1] + y)
 
 class GameOfLife:
     #Board tracks every relevant cell, AKA all live cells + every dead cell with live neighbors
-    board = {}
+    board = none
+
+    def __init__(self):
+        self.board = {}
+    
 
     #Make dictionary of cells
     #{'x,y':Bool}
@@ -17,22 +24,33 @@ class GameOfLife:
     #Count the number of neighboring cells that are alive
     #next to the given cell
     def neighbor_count(self, cell):
-        pass
+        count = 0
+        for neighbour in neighbours(cell):
+            if self.is_alive(neighbour):
+                count += 1
+        return count
+
+    #Very self descriptive
+    def is_alive(self, cell):
+        if cell in self.board:
+            return self.board[cell]
+        return False
 
     #Set the life status of a cell to alive
     ##Also adds neighboring cells to the board
     def revive(self, cell):
-        
-        pass
+        self.board[cell] = True
+        for neighbour in neighbours(cell):
+            if cell not in self.board:
+                self.board[cell] = False
 
     #Set the life status of a cell to dead
     ##Also removes the cell from the board if it has no live neighbors
     def kill(self, cell):
-        pass
-
-    #
-    def exists(self, cell):
-        pass
+        if self.neighbour_count(cell) == 0:
+            del self.board[cell]
+        else:
+            self.board[cell] = False
 
     #go forwards one turn
     def step(self):
