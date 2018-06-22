@@ -3,11 +3,11 @@ def neighbours(cell):
     for x in range(-1, 2):
         for y in range(-1, 2):
             if not (x == y == 0):
-                yield "%i,%i" % (position[0] + x, position[1] + y)
+                yield "%i,%i" % (int(position[0]) + x, int(position[1]) + y)
 
 class GameOfLife:
     #Board tracks every relevant cell, AKA all live cells + every dead cell with live neighbors
-    board = none
+    board = {}
 
     def __init__(self):
         self.board = {}
@@ -41,8 +41,8 @@ class GameOfLife:
     def revive(self, cell):
         self.board[cell] = True
         for neighbour in neighbours(cell):
-            if cell not in self.board:
-                self.board[cell] = False
+            if neighbour not in self.board:
+                self.board[neighbour] = False
 
     #Set the life status of a cell to dead
     ##Also removes the cell from the board if it has no live neighbors
@@ -54,6 +54,7 @@ class GameOfLife:
 
     #go forwards one turn
     def step(self):
+        copy = self.board.copy()
         for cell, alive in self.board[:].items():
             count = self.neighbor_count(cell)
             if alive and ((count > 3) or (count < 2)):
@@ -67,8 +68,10 @@ class GameOfLife:
     #-11 <===> 11
     def render(self):
         for y in range(11, -12, -1):
-            line = "                                                                                "
+            line = ""
             for x in range(-40, 40):
                 if self.is_alive("%i,%i" % (x, y)):
-                    line[x] = "x"
+                    line += "x"
+                else:
+                    line += " "
             print(line)
