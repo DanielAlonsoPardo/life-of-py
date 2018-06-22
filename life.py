@@ -6,7 +6,7 @@ def neighbours(cell):
                 yield "%i,%i" % (int(position[0]) + x, int(position[1]) + y)
 
 class GameOfLife:
-    #Board tracks every relevant cell, AKA all live cells + every dead cell with live neighbors
+    #Board tracks every relevant cell, AKA all live cells + every dead cell with live neighbours
     board = {}
 
     def __init__(self):
@@ -17,13 +17,13 @@ class GameOfLife:
     #{'x,y':Bool}
     #At every iteration:
     #Check each live and dead cell in the dic
-    #If the cell lives, add its neighbors to the dic
-    #if it dies, and it has no neighbors, remove from dic
+    #If the cell lives, add its neighbours to the dic
+    #if it dies, and it has no neighbours, remove from dic
 
 
-    #Count the number of neighboring cells that are alive
+    #Count the number of neighbouring cells that are alive
     #next to the given cell
-    def neighbor_count(self, cell):
+    def neighbour_count(self, cell):
         count = 0
         for neighbour in neighbours(cell):
             if self.is_alive(neighbour):
@@ -37,7 +37,7 @@ class GameOfLife:
         return False
 
     #Set the life status of a cell to alive
-    ##Also adds neighboring cells to the board
+    ##Also adds neighbouring cells to the board
     def revive(self, cell):
         self.board[cell] = True
         for neighbour in neighbours(cell):
@@ -45,7 +45,7 @@ class GameOfLife:
                 self.board[neighbour] = False
 
     #Set the life status of a cell to dead
-    ##Also removes the cell from the board if it has no live neighbors
+    ##Also removes the cell from the board if it has no live neighbours
     def kill(self, cell):
         if self.neighbour_count(cell) == 0:
             del self.board[cell]
@@ -54,13 +54,16 @@ class GameOfLife:
 
     #go forwards one turn
     def step(self):
-        copy = self.board.copy()
-        for cell, alive in self.board[:].items():
-            count = self.neighbor_count(cell)
+        next_step = GameOfLife()
+        next_step.board = self.board.copy()
+
+        for cell, alive in self.board.items():
+            count = self.neighbour_count(cell)
             if alive and ((count > 3) or (count < 2)):
-                self.kill(cell)
+                next_step.kill(cell)
             elif not alive and (count == 3):
-                self.revive(cell)
+                next_step.revive(cell)
+        self.board = next_step.board
 
     #Print to terminal
     #80 x 23
