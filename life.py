@@ -61,3 +61,14 @@ class GameOfLife:
             elif not alive and (count == 3):
                 self.revive(cell)
 
+    #Print to terminal
+    #80 x 23
+    #-40 <===> 39
+    #-11 <===> 11
+    def render(self):
+        for y in range(11, -12, -1):
+            line = "                                                                                "
+            for x in range(-40, 40):
+                if self.is_alive("%i,%i" % (x, y)):
+                    line[x] = "x"
+            print(line)
