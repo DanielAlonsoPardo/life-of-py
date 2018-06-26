@@ -9,8 +9,10 @@ class GameOfLife:
     #Board tracks every relevant cell, AKA all live cells + every dead cell with live neighbours
     board = {}
 
-    def __init__(self):
+    def __init__(self, seed=()):
         self.board = {}
+        for cell in seed:
+            self.revive(cell)
     
 
     #Make dictionary of cells
